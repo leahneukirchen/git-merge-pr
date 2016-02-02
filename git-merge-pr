@@ -7,7 +7,7 @@ REMOTE=
 case "$PR" in
 *@*)
 	REMOTE=${PR#*@}
-	PR=${PR%%@*};;
+	PR=${PR%%@*}
 esac
 shift
 
@@ -17,7 +17,17 @@ PROJECT=${URL%.git}
 PROJECT=${PROJECT##*:}
 PROJECT=${PROJECT#//github.com/}
 
-PATCH=$(mktemp)
+PATCH="$(mktemp)"
 trap "rm -f $PATCH" INT TERM EXIT
-wget -nv -O "$PATCH" https://github.com/$PROJECT/pull/$PR.patch
+wget -nv -O "$PATCH" https://github.com/$PROJECT/pull/"$PR".patch
 git am "$@" "$PATCH"
+
+if [ "$(git config --bool --get merge-pr.autoclose)" = false ]; then
+	exit 0
+fi
+
+# Rewrite last commit message to close GitHub issue.
+EDITOR='sh -c '\''git -c trailer.closes.ifExists=replace interpret-trailers \
+		--trailer "Closes: #'"$PR"' [via git-merge-pr]" "$1" > "$1-" &&
+	mv "$1-" "$1"'\'' -' \
+git commit --quiet --amend
