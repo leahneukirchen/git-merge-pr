@@ -27,7 +27,7 @@ if [ "$(git config --bool --get merge-pr.autoclose)" = false ]; then
 fi
 
 # Rewrite last commit message to close GitHub issue.
-EDITOR='sh -c '\''git -c trailer.closes.ifExists=replace interpret-trailers \
+GIT_EDITOR='sh -c '\''git -c trailer.closes.ifExists=replace interpret-trailers \
 		--trailer "Closes: #'"$PR"' [via git-merge-pr]" "$1" > "$1-" &&
 	mv "$1-" "$1"'\'' -' \
 git commit --quiet --amend
