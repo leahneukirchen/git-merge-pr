@@ -27,7 +27,7 @@ Useful `git am` flags:
 
 ## Requirements
 
-* Git 2.2.0 or newer
+* Git 2.8.0 or newer
 * wget
 * jq (only for listing pull requests)
 
