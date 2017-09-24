@@ -30,7 +30,7 @@ fi
 PATCH="$(mktemp)"
 trap "rm -f $PATCH" INT TERM EXIT
 wget -nv -O "$PATCH" https://github.com/$PROJECT/pull/"$PR".patch
-WHITESPACE="$(git config --get merge-pr.whitespace)"
+WHITESPACE="$(git config --get merge-pr.whitespace || true)"
 git am "--whitespace=${WHITESPACE:-warn}" "$@" "$PATCH"
 
 if [ "$(git config --bool --get merge-pr.autoclose)" = false ]; then
