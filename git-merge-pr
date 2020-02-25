@@ -18,9 +18,9 @@ PROJECT=${PROJECT#//github.com/}
 
 if [ -z "$PR" ]; then
 	wget -q -O- --header 'Accept: application/json' \
-		"https://api.github.com/repos/${PROJECT}/pulls?direction=asc" |
+		"https://api.github.com/repos/${PROJECT}/pulls" |
 		jq -r 'if length > 0
-			then .[] | "\(.number) <\(.user.login)> \(.title)"
+			then reverse[] | "\(.number) <\(.user.login)> \(.title)"
 			else "No open pull requests." end'
 	exit $?
 else
