@@ -17,7 +17,7 @@ PROJECT=${PROJECT##*:}
 PROJECT=${PROJECT#//github.com/}
 
 if command -v wget >/dev/null; then
-	API_CMD="wget -q -O --header"
+	API_CMD="wget -q -O- --header"
 	PATCH_CMD="wget -nv -O"
 elif command -v curl >/dev/null; then
 	API_CMD="curl -s -H"
